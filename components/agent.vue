@@ -3,10 +3,10 @@
     <div class="uk-width-1-3 uk-width-1-4@l uk-height-viewport uk-panel-scrollable" id="agent-info-screen">
       <div uk-grid>
         <div>
-          <h1 class="uk-h3 uk-padding-small">Agent #{{ agentid }}</h1>
+          <h1 class="uk-h3 uk-padding-small">Doctor #{{ agentid }}</h1>
         </div>
         <div>
-          <router-link to="/end" class="uk-button uk-button-danger uk-b">Exit</router-link>
+          <router-link to="/enddrsession" class="uk-button uk-button-danger uk-b">Exit</router-link>
         </div>
       </div>
 
@@ -19,10 +19,10 @@
           <h3 class="uk-h4">Caller #{{ caller.callerId }}</h3>
         </div>
         <div class="uk-card-body">
-          <ul class="uk-list">
+          <!-- <ul class="uk-list">
             <li>Name: {{ caller.callerName || 'N/A' }}</li>
             <li>Reason: {{ caller.callerReason || 'N/A' }}</li>
-          </ul>
+          </ul> -->
           <span v-if="caller.agentConnected" class="uk-card-badge uk-label uk-label-success">Live</span>
           <span v-if="caller.onHold" class="uk-card-badge uk-label uk-label-warning">On Hold</span>
           <button

@@ -564,17 +564,18 @@ app.get('/agent/:id/callers', (req, res, next) => {
   }else{
     console.log('Not Assigned');
   }
-  // res.status(200).json({ callers: a.activeCallers() })
-  res.status(200).json({
+  res.status(200).json({ callers: a.activeCallers() })
+
+  // res.status(200).json({
     // callers: Array.from(callers.values()).map(c => c.status())
     // callers: a.currentCallers
 
-    callers: Array.from(a.currentCallers.values()).map(c => c.status())
+    // callers: Array.from(a.currentCallers.values()).map(c => c.status())
 
     // Array.from(this.currentCallers.values()).filter(c => c.ready).map(c => c.status())
 
 
-  })
+  // })
 
 })
 
@@ -601,8 +602,8 @@ app.post('/agent/:id/disconnect', (req, res, next) => {
  */
 app.post('/agent', (req, res, next) => {
   let a = new Agent(req.body.name || 'N/A')
-  // a.assignPending(3)
-  a.assignPending(1)
+  a.assignPending(3)
+  // a.assignPending(1)
   agents.set(a.agentid, a)
 
   res.status(200).json({

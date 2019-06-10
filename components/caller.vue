@@ -6,7 +6,7 @@
         :onHold="onHold" :caller="caller" @error="errorHandler" @endCall="endCallHandler">
       </self-view>
 
-      <div class="uk-card uk-card-default uk-card-small uk-margin-small-top">
+      <!-- <div class="uk-card uk-card-default uk-card-small uk-margin-small-top">
         <div class="uk-card-header">
           <h2 class="uk-h4">Caller info</h2>
         </div>
@@ -16,7 +16,7 @@
             <li>Reason: {{ callerReason || 'N/A'}}</li>
           </ul>
         </div>
-      </div>
+      </div> -->
     </div>
 
     <div v-if="!caller" class="uk-width-expand uk-position-relative" :class="{ 'uk-background-secondary': onHold }">
@@ -25,43 +25,47 @@
           <div class="uk-card uk-card-default uk-width-3-4 uk-width-3-5@m uk-align-center">
             <form v-on:submit.prevent="onSubmit">
               <div class="uk-card-header">
-                <p class="uk-h3">Welcome to CTI Africa</p>
-                <p>Contact our audio/video call center</p>
+                <!-- <p class="uk-h3">Welcome to CTI Africa Video Call Center</p> -->
+
+                <p class="uk-h3">Please wait as we connect you</p>
+
+                <!-- <p>Contact our audio/video call center</p> -->
+                <!-- <p></p> -->
               </div>
-              <div class="uk-card-body">
-                <div class="uk-margin" uk-grid>
+              <!-- <div class="uk-card-body"> -->
+                <!-- <div class="uk-margin" uk-grid>
                   <div class="uk-width-1-3 uk-text-right uk-text-bold">
                     <label for="caller-name">Your name</label>
                   </div>
                   <div class="uk-width-auto">
                     <input type="text" id="caller-name" v-model="callerName" autofocus ref='callerName'>
                   </div>
-                </div>
-                <div class="uk-margin" uk-grid>
+                </div> -->
+                <!-- <div class="uk-margin" uk-grid>
                   <div class="uk-width-1-3 uk-text-right uk-text-bold">
                     <label for="caller-reason">Reason for call</label>
                   </div>
                   <div class="uk-width-expand">
                     <input type="text" v-model="callerReason" id="caller-reason">
                   </div>
-                </div>
-                <div class="uk-margin" uk-grid>
+                </div> -->
+                <!-- <div class="uk-margin" uk-grid>
                   <div class="uk-width-1-3 uk-text-right uk-text-bold">
                     <div class="uk-form-label">Join via</div>
                   </div>
                   <div class="uk-form-controls uk-form-controls-text uk-width-expand">
                       <label><input class="uk-radio" type="radio" name="audioVideo" value="audioVideo"
-                        v-model="audioVideo">Audio/Video</label><br>
-                      <label><input class="uk-radio" type="radio" name="audioVideo" value="audioOnly"
-                        v-model="audioVideo">Audio only</label>
-                  </div>
-                </div>
-              </div>
+                        v-model="audioVideo">Audio and Video</label><br> -->
+                      <!-- <label><input class="uk-radio" type="radio" name="audioVideo" value="audioOnly"
+                        v-model="audioVideo">Audio only</label> -->
+                  <!-- </div>
+                </div> -->
+              <!-- </div> -->
               <div class="uk-card-footer">
                 <div class="uk-margin" uk-grid>
-                  <div class="uk-width-1-3">
+                  <!-- <div class="uk-width-1-3">
                     <router-link to="/" class="uk-button uk-button-secondary">Exit</router-link>
-                  </div>
+                  </div> -->
                   <div class="uk-form-controls uk-form-controls-text uk-width-expand">
                     <input type="submit" value="Place call" class="uk-button uk-button-primary uk-margin-remove-left">
                   </div>
@@ -78,7 +82,7 @@
         Agent has put you on hold&hellip;
       </p>
       <p v-if="!agentConnected && !onHold" class="uk-position-center uk-width-1-1 uk-text-center uk-text-lead">
-        Waiting for agent to join&hellip;
+        Waiting for the doctor to join&hellip;
       </p>
 
       <ot-subscriber v-if="agentStream" @error="errorHandler" :stream="agentStream" :session="session" :opts="subscriberOpts"
@@ -212,7 +216,17 @@ export default {
   }),
 
   mounted() {
-    this.$refs.callerName.focus()
+    // this.$refs.callerName.focus()
+
+
+    axios.post('/dial', { callerName: this.callerName, callerReason: this.callerReason, audioVideo: this.audioVideo })
+    .then(res => {
+      this.caller = res.data.caller
+      this.otConnect(res.data.apiKey, res.data.caller.sessionId, res.data.caller.token, res.data.caller.callerId)
+    })
+    .catch(console.log)
+
+
   },
 
  //  mounted() {
