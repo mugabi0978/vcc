@@ -110,38 +110,9 @@ function successHandler(msg) {
   UIkit.notification(msg, { pos: 'bottom-left', status: 'success', timeout: 2500 } )
 }
 
-function endCall_(callerId) {
-  if (this.callerSession && this.callerSession.isConnected()) {
-    this.callerSession.disconnect()
-  }
-  this.deleteCaller(callerId)
-}
-
-function deleteCaller(callerId) {
-  for (const c in this.callers) {
-    if (this.callers[c].callerId === callerId) {
-      axios.get(`/call/${callerId}/delete`)
-        .then(res => {
-          this.callers.splice(c, 1)
-        })
-        .catch(errorHandler)
-    }
-  }
-}
-
-
 function endCallHandler () {
-  // endCall_(res.data.caller.callerId)
-
-  // console.log('CallerID', res.data.caller.callerId)
-  // console.log('CallerID-2', this.$refs.callerId );
-
-  // endCall_()
-
   this.$router.push('/end')
 }
-
-
 
 function otConnect (apiKey, sessionId, token, callerId) {
   this.session = OT.initSession(apiKey, sessionId)
@@ -168,10 +139,6 @@ function otConnect (apiKey, sessionId, token, callerId) {
     this.agentConnected = true
   })
   this.session.on('signal:endCall', () => {
-    //delete callerReason
-    console.log('Caller Id', callerId)
-
-
     this.endCallHandler()
   })
   this.session.on('streamCreated', (event) => {
@@ -228,26 +195,7 @@ export default {
 
 
   },
-
- //  mounted() {
- //  axios.get('/dial')
- //  .then(res => {
- //    this.caller = res.data.caller
- //    this.otConnect(res.data.apiKey, res.data.caller.sessionId, res.data.caller.token)
- //  })
- //  .catch(console.log)
- // },
- //
- //  beforeDestroy () {
- //    if (this.session && this.session.isConnected()) {
- //      console.log('Disconnecting from session', this.session.sessionId)
- //      this.session.disconnect()
- //    }
- //  },
-
   methods: {
-    endCall_,
-    deleteCaller,
     errorHandler,
     successHandler,
     otConnect,

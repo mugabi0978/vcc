@@ -122,12 +122,7 @@ export default {
         this.isMuted = !this.isMuted
       }
     },
-    // endCall_,
-    // deleteCaller,
     endCall: function () {
-
-      // this.endCall_(caller.callerId)
-
       this.$emit('endCall')
     }
   }
