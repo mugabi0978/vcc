@@ -10,14 +10,14 @@ const PORT = process.env.PORT || 8081
 
 // Set OPENTOK_API_KEY from environment variable
 // Exit with error if the environment variable is not specified.
-const OPENTOK_API_KEY = "46334272"
+const OPENTOK_API_KEY = process.env.OPENTOK_API_KEY
 if (!OPENTOK_API_KEY) {
   throw new Error('Provide OPENTOK_API_KEY environment variable')
 }
 
 // Set OPENTOK_API_SECRET from environment variable
 // Exit with error if the environment variable is not specified.
-const OPENTOK_API_SECRET = "0d3e0201b91a72311b943938bf52d8679af1cba2"
+const OPENTOK_API_SECRET = process.env.OPENTOK_API_SECRET
 if (!OPENTOK_API_SECRET) {
   throw new Error('Provide OPENTOK_API_SECRET environment variable')
 }
@@ -233,7 +233,7 @@ Agent.prototype.assignCaller = function (c) {
 
   console.log('New Agent assigned', this.agentid +' to '+ c.callerId)
 
-  console.log('Active callers', this.currentCaller)
+  // console.log('Active callers', this.currentCaller)
 }
 
 /**

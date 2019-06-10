@@ -2,8 +2,8 @@
   <div>
     <div class="uk-section uk-section-primary">
       <div class="uk-container uk-text-center">
-        <h1 class="uk-margin-large-top">CTI Africa Call Center Demo</h1>
-        <p class="uk-text-lead">This demo showcases a simulation of call center where callers queue up to talk to available agents.</p>
+        <h1 class="uk-margin-large-top">CTI Africa Call the Clinic</h1>
+        <p class="uk-text-lead">A video call center where callers queue up to talk to available doctors.</p>
       </div>
     </div>
     <div class="uk-section uk-section-default">
