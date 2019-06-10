@@ -6,7 +6,7 @@ const compression = require('compression')
 const bodyParser = require('body-parser')
 
 // Get configurations
-const PORT = process.env.PORT || 8080
+const PORT = process.env.PORT || 8081
 
 // Set OPENTOK_API_KEY from environment variable
 // Exit with error if the environment variable is not specified.
@@ -107,6 +107,8 @@ function Caller (sessionId, token) {
   this.connectedSince = new Date()
   // Time when the call started
   this.onCallSince = null
+
+
   // Whether caller is ready. This is set to true only after caller has successfully connected to OpenTok.
   this.ready = false
   // Name for this caller.
@@ -228,6 +230,10 @@ Agent.prototype.assignPending = function (limit = 1) {
 Agent.prototype.assignCaller = function (c) {
   c.assignedAgent = this.agentid
   this.currentCallers.set(c.callerId, c)
+
+  console.log('New Agent assigned', this.agentid +' to '+ c.callerId)
+
+  // console.log('Active callers', this.currentCaller)
 }
 
 /**
@@ -264,7 +270,8 @@ Agent.prototype.activeCallers = function () {
 }
 
 /**
- * Get number of callers assigned to this agent
+ * Get number of
+ assigned to this agent
  *
  * @returns {number}
  */
@@ -376,6 +383,27 @@ app.use(bodyParser.urlencoded({ extended: true }))
 app.use('/', express.static('./public'))
 
 // --- REST endpoints ---
+
+//old format
+app.get('/dial', (req, res, next) => {
+  const c = new Caller()
+  createSession()
+    .then(session => {
+      c.sessionId = session.sessionId
+      return createToken(session.sessionId, c.callerId, 'caller')
+    })
+    .then(token => {
+      c.token = token
+      callers.set(c.callerId, c)
+      return res.status(200).json({
+        callerId: c.callerId,
+        apiKey: OPENTOK_API_KEY,
+        caller: c
+      })
+    })
+    .catch(next)
+})
+
 
 /**
  * POST /dial
@@ -525,9 +553,30 @@ app.get('/agent/:id/callers', (req, res, next) => {
     return next(e)
   }
   if (a.callerCount() < 3) {
+      // a.assignPending(3)
     a.assignPending(1)
+    // console.log('Assigned 1');
+    //
+    // console.log('data', a.activeCallers());
+    // console.log('data2', a.callerCount());
+    // console.log('data3', a.currentCallers);
+
+  }else{
+    console.log('Not Assigned');
   }
   res.status(200).json({ callers: a.activeCallers() })
+
+  // res.status(200).json({
+    // callers: Array.from(callers.values()).map(c => c.status())
+    // callers: a.currentCallers
+
+    // callers: Array.from(a.currentCallers.values()).map(c => c.status())
+
+    // Array.from(this.currentCallers.values()).filter(c => c.ready).map(c => c.status())
+
+
+  // })
+
 })
 
 /**
@@ -554,7 +603,9 @@ app.post('/agent/:id/disconnect', (req, res, next) => {
 app.post('/agent', (req, res, next) => {
   let a = new Agent(req.body.name || 'N/A')
   a.assignPending(3)
+  // a.assignPending(1)
   agents.set(a.agentid, a)
+
   res.status(200).json({
     agentid: a.agentid,
     name: a.name
@@ -575,6 +626,13 @@ app.post('/ot_callback', (req, res) => {
   }
   res.status(200).send()
 })
+
+app.get('/calls', (req, res, next) => {
+  res.status(200).json({
+    callers: Array.from(callers.values()).map(c => c.status())
+  })
+})
+
 
 // error handler
 app.use(function (err, req, res, next) {

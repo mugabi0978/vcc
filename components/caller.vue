@@ -66,9 +66,9 @@
                   <!-- <div class="uk-width-1-3">
                     <router-link to="/" class="uk-button uk-button-secondary">Exit</router-link>
                   </div> -->
-                  <div class="uk-form-controls uk-form-controls-text uk-width-expand">
+                  <!-- <div class="uk-form-controls uk-form-controls-text uk-width-expand">
                     <input type="submit" value="Place call" class="uk-button uk-button-primary uk-margin-remove-left">
-                  </div>
+                  </div> -->
                 </div>
               </div>
             </form>
